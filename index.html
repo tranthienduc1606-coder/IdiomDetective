@@ -1205,6 +1205,406 @@
 
       const casesData = [
         {
+          title: "Actions speak louder than words",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Hành động có giá trị hơn lời nói",
+          tags: ["Cuộc Sống"],
+          example: "He promised to study harder, but actions speak louder than words."
+        },
+        {
+          title: "Add insult to injury",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Thêm dầu vào lửa",
+          tags: ["Giao Tiếp"],
+          example: "They lost the match, and to add insult to injury, their best player was injured."
+        },
+        {
+          title: "Back to the drawing board",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Bắt đầu lại từ đầu (vì kế hoạch trước thất bại)",
+          tags: ["Công Việc", "Học Tập"],
+          example: "The experiment failed, so it's back to the drawing board."
+        },
+        {
+          title: "The ball is in your court",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Quyền quyết định thuộc về bạn",
+          tags: ["Giao Tiếp", "Công Việc"],
+          example: "I've made my offer. Now the ball is in your court."
+        },
+        {
+          title: "Bite your tongue",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Cố gắng nhịn nói, giữ im lặng",
+          tags: ["Giao Tiếp"],
+          example: "I wanted to argue, but I had to bite my tongue."
+        },
+        {
+          title: "Break the ice",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Phá vỡ bầu không khí ngượng ngùng ban đầu",
+          tags: ["Giao Tiếp"],
+          example: "He told a joke to break the ice at the meeting."
+        },
+        {
+          title: "Cross that bridge when you come to it",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Tới đâu hay tới đó, không lo xa",
+          tags: ["Cuộc Sống"],
+          example: "We might run out of budget, but we'll cross that bridge when we come to it."
+        },
+        {
+          title: "Play devil's advocate",
+          difficulty: "difficulty-hard",
+          diffText: "Khó",
+          desc: "Đóng vai ác (đưa ra ý kiến trái chiều để tranh luận)",
+          tags: ["Giao Tiếp", "IELTS"],
+          example: "I agree with you, but let me play devil's advocate for a moment."
+        },
+        {
+          title: "Don't judge a book by its cover",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Đừng đánh giá qua vẻ bề ngoài",
+          tags: ["Cuộc Sống"],
+          example: "She looks quiet, but she's a great leader. Don't judge a book by its cover."
+        },
+        {
+          title: "Don't put the cart before the horse",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Cầm đèn chạy trước ô tô",
+          tags: ["Công Việc"],
+          example: "Let's secure the funding first. Don't put the cart before the horse."
+        },
+        {
+          title: "Face the music",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Chấp nhận hậu quả của việc mình làm",
+          tags: ["Cuộc Sống"],
+          example: "You made a mistake, and now you have to face the music."
+        },
+        {
+          title: "Fit as a fiddle",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Khỏe như vâm",
+          tags: ["Sức Khỏe"],
+          example: "My grandfather is 80 but he's as fit as a fiddle."
+        },
+        {
+          title: "Get cold feet",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Chùn bước, mất can đảm phút chót",
+          tags: ["Cảm Xúc"],
+          example: "He was going to invest in that stock, but he got cold feet."
+        },
+        {
+          title: "Get your act together",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Chấn chỉnh lại bản thân, làm việc đàng hoàng",
+          tags: ["Động Lực"],
+          example: "You need to get your act together if you want to pass the exam."
+        },
+        {
+          title: "Give the benefit of the doubt",
+          difficulty: "difficulty-hard",
+          diffText: "Khó",
+          desc: "Tạm tin tưởng ai đó vì chưa có bằng chứng họ sai",
+          tags: ["Giao Tiếp"],
+          example: "I'll give him the benefit of the doubt and assume his train was late."
+        },
+        {
+          title: "Go back to square one",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Quay lại vạch xuất phát",
+          tags: ["Công Việc"],
+          example: "If this proposal is rejected, we'll have to go back to square one."
+        },
+        {
+          title: "Go the extra mile",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Làm nhiều hơn những gì được yêu cầu",
+          tags: ["Học Tập", "Công Việc"],
+          example: "She always goes the extra mile to ensure her research is accurate."
+        },
+        {
+          title: "Hit the sack",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Đi ngủ",
+          tags: ["Cuộc Sống"],
+          example: "I'm exhausted. I'm going to hit the sack."
+        },
+        {
+          title: "It takes two to tango",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Có lửa mới có khói (cả hai đều có lỗi)",
+          tags: ["Giao Tiếp", "Tình Cảm"],
+          example: "Don't just blame him for the argument; it takes two to tango."
+        },
+        {
+          title: "Jump on the bandwagon",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Hùa theo đám đông, chạy theo xu hướng",
+          tags: ["Cuộc Sống"],
+          example: "Many investors jumped on the bandwagon when tech stocks surged."
+        },
+        {
+          title: "Keep your chin up",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Lạc quan lên, đừng nản chí",
+          tags: ["Động Lực"],
+          example: "Keep your chin up, you'll find a better job soon."
+        },
+        {
+          title: "Leave no stone unturned",
+          difficulty: "difficulty-hard",
+          diffText: "Khó",
+          desc: "Tìm kiếm mọi ngóc ngách, làm mọi cách",
+          tags: ["Công Việc", "IELTS"],
+          example: "The researchers left no stone unturned in their search for the data."
+        },
+        {
+          title: "Let sleeping dogs lie",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Chuyện cũ bỏ qua, đừng khơi lại rắc rối",
+          tags: ["Giao Tiếp"],
+          example: "I didn't ask her about her ex-boyfriend. It's better to let sleeping dogs lie."
+        },
+        {
+          title: "Method to the madness",
+          difficulty: "difficulty-hard",
+          diffText: "Khó",
+          desc: "Sự hỗn loạn có chủ đích",
+          tags: ["Tính Cách"],
+          example: "His desk looks messy, but there's a method to the madness."
+        },
+        {
+          title: "Off the top of my head",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Nói ngay không cần suy nghĩ/kiểm tra",
+          tags: ["Giao Tiếp"],
+          example: "Off the top of my head, I think the meeting is at 3 PM."
+        },
+        {
+          title: "Once in a blue moon",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Năm thì mười họa, rất hiếm khi",
+          tags: ["Cuộc Sống"],
+          example: "I only eat fast food once in a blue moon."
+        },
+        {
+          title: "Out of the blue",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Bất thình lình, không báo trước",
+          tags: ["Cuộc Sống"],
+          example: "He called me out of the blue after five years."
+        },
+        {
+          title: "A penny for your thoughts",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Bạn đang nghĩ gì vậy?",
+          tags: ["Giao Tiếp"],
+          example: "You look so serious. A penny for your thoughts?"
+        },
+        {
+          title: "Play it by ear",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Tùy cơ ứng biến",
+          tags: ["Cuộc Sống"],
+          example: "We don't have a fixed itinerary for the trip; we'll just play it by ear."
+        },
+        {
+          title: "Read between the lines",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Hiểu được ẩn ý",
+          tags: ["Giao Tiếp", "IELTS"],
+          example: "If you read between the lines, you'll see he's not happy with the plan."
+        },
+        {
+          title: "Rule of thumb",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Nguyên tắc chung (dựa trên kinh nghiệm)",
+          tags: ["Học Tập", "Công Việc"],
+          example: "As a rule of thumb, one cup of rice needs two cups of water."
+        },
+        {
+          title: "See eye to eye",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Đồng quan điểm",
+          tags: ["Giao Tiếp"],
+          example: "My boss and I don't always see eye to eye."
+        },
+        {
+          title: "Steal someone's thunder",
+          difficulty: "difficulty-hard",
+          diffText: "Khó",
+          desc: "Giành hết sự chú ý của ai đó",
+          tags: ["Cuộc Sống"],
+          example: "She wore a white dress to the wedding and stole the bride's thunder."
+        },
+        {
+          title: "Straight from the horse's mouth",
+          difficulty: "difficulty-hard",
+          diffText: "Khó",
+          desc: "Nghe trực tiếp từ nguồn tin cậy",
+          tags: ["Giao Tiếp"],
+          example: "I know it's true because I heard it straight from the horse's mouth."
+        },
+        {
+          title: "Take a rain check",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Hẹn dịp khác nhé",
+          tags: ["Giao Tiếp"],
+          example: "I'm busy tonight, can I take a rain check on dinner?"
+        },
+        {
+          title: "The whole nine yards",
+          difficulty: "difficulty-hard",
+          diffText: "Khó",
+          desc: "Toàn bộ, tất tần tật",
+          tags: ["Cuộc Sống"],
+          example: "He planned the party, bought the food, hired the band—the whole nine yards."
+        },
+        {
+          title: "Throw in the towel",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Bỏ cuộc, nhận thua",
+          tags: ["Động Lực"],
+          example: "The project was too difficult, but she refused to throw in the towel."
+        },
+        {
+          title: "Up in the air",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Chưa chắc chắn, còn bỏ ngỏ",
+          tags: ["Công Việc"],
+          example: "Our travel plans are still up in the air."
+        },
+        {
+          title: "Water under the bridge",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Chuyện đã qua rồi",
+          tags: ["Tình Cảm"],
+          example: "We had a fight last year, but it's all water under the bridge now."
+        },
+        {
+          title: "Wear your heart on your sleeve",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Để lộ hết cảm xúc ra ngoài",
+          tags: ["Tính Cách"],
+          example: "You always know how he feels because he wears his heart on his sleeve."
+        },
+        {
+          title: "A penny saved is a penny earned",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Tiết kiệm cũng như kiếm tiền",
+          tags: ["Tài Chính"],
+          example: "I decided to cook at home instead of eating out. A penny saved is a penny earned."
+        },
+        {
+          title: "Birds of a feather flock together",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Ngưu tầm ngưu, mã tầm mã",
+          tags: ["Cuộc Sống"],
+          example: "Those two troublemakers are always together; birds of a feather flock together."
+        },
+        {
+          title: "Catch someone red-handed",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Bắt tại trận",
+          tags: ["Cuộc Sống"],
+          example: "The police caught the thief red-handed taking the jewelry."
+        },
+        {
+          title: "Come rain or shine",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Dù mưa hay nắng (dù có chuyện gì xảy ra)",
+          tags: ["Động Lực"],
+          example: "I will be there to support you, come rain or shine."
+        },
+        {
+          title: "Cut somebody some slack",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Không quá khắt khe với ai đó",
+          tags: ["Giao Tiếp"],
+          example: "He's new to the team, so cut him some slack if he makes a mistake."
+        },
+        {
+          title: "Easy does it",
+          difficulty: "difficulty-easy",
+          diffText: "Dễ",
+          desc: "Cứ từ từ, cẩn thận",
+          tags: ["Cuộc Sống"],
+          example: "Easy does it when you move that fragile antique."
+        },
+        {
+          title: "Go down in flames",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Thất bại thảm hại",
+          tags: ["Công Việc"],
+          example: "The startup company went down in flames after just six months."
+        },
+        {
+          title: "In the heat of the moment",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Trong lúc nóng giận/hành động mất kiểm soát",
+          tags: ["Cảm Xúc"],
+          example: "I said some terrible things in the heat of the moment."
+        },
+        {
+          title: "Keep your eyes peeled",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Mở to mắt mà nhìn, cảnh giác",
+          tags: ["Cuộc Sống"],
+          example: "Keep your eyes peeled for a parking spot."
+        },
+        {
+          title: "Let the dust settle",
+          difficulty: "difficulty-medium",
+          diffText: "Trung Bình",
+          desc: "Đợi tình hình dịu lại",
+          tags: ["Giao Tiếp", "Công Việc"],
+          example: "We shouldn't make any decisions until we let the dust settle."
+        },
+        {
           title: "Cost an arm and a leg",
           difficulty: "difficulty-hard",
           diffText: "Khó",
