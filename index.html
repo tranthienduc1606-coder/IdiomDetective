@@ -306,7 +306,7 @@
         background: white;
         box-shadow: 0 4px 0 var(--color-dark);
       }
-
+      
       .search-bar input {
         flex: 1;
         border: none;
@@ -728,14 +728,10 @@
         <div class="search-section">
           <h2>Tìm Kiếm & Điều Tra Thành Ngữ</h2>
           <div class="search-bar">
-            <input
-              type="text"
-              id="idiomInput"
-              placeholder="Nhập thành ngữ tiếng Anh bạn muốn bóc tách..."
-              value="when pigs fly"
-            />
+            <input type="text" id="idiomInput" placeholder="Nhập thành ngữ tiếng Anh bạn muốn bóc tách..." value="" />
             <button id="searchBtn">SEARCH</button>
           </div>
+          <div id="homeSearchResults" class="cases-grid" style="margin-top: 25px; display: none; text-align: left;"></div>
         </div>
 
         <div class="evidence-grid">
@@ -1093,13 +1089,45 @@
             🔄 Tạo Mê Cung Mới
           </button>
         </div>
+        <div class="ranking-menu">
+          <h3 style="margin-top: 0; text-align: center;">🏆 Bảng Vàng Thám Tử (Top 8)</h3>
+          <div id="leaderboardList">
+          </div>
+        </div>
       </div>
 
       <div id="cases" class="tab-page">
         <h2>🔍 Hồ Sơ Vụ Án - Các Thành Ngữ Cần Điều Tra</h2>
         <div class="cases-grid" id="casesGrid"></div>
       </div>
-
+      <div id="idiom-detail" class="tab-page">
+        <button class="btn-action" style="margin-bottom: 20px; background-color: var(--color-yellow);"
+          onclick="showTab('cases')">
+          ⬅ Quay lại Hồ Sơ Vụ Án
+        </button>
+      
+        <div class="card bg-lavender" style="text-align: center; padding: 40px; border-width: 4px;">
+          <div id="detailTags" style="margin-bottom: 15px;"></div>
+          <h2 id="detailTitle" style="font-size: 36px; margin: 10px 0; color: var(--color-dark);">Title</h2>
+          <p id="detailDesc" style="font-size: 22px; font-weight: bold; margin-bottom: 15px;"></p>
+          <p id="detailExample"
+            style="font-size: 18px; font-style: italic; color: #555; background: white; padding: 15px; border-radius: 8px; border: 2px dashed var(--color-dark); display: inline-block;">
+          </p>
+        </div>
+      
+        <div class="form-container" style="max-width: 100%; margin-top: 30px;">
+          <h3 style="margin-top: 0;">📝 Sổ Ghi Chú Của Thám Tử</h3>
+          <p style="font-size: 14px; color: #555; margin-top: -10px;">Ghi lại các từ vựng khó, ý tưởng thiết kế bài giảng hoặc
+            ngữ cảnh mở rộng.</p>
+          <div class="form-group">
+            <textarea id="detailNotes" rows="6" placeholder="Gõ ghi chú của bạn vào đây..."></textarea>
+          </div>
+          <button class="btn-action" id="saveNoteBtn">💾 Lưu Ghi Chú</button>
+          <button class="btn-action" id="detailSaveIdiomBtn" style="background-color: var(--color-pink); margin-left: 10px;">➕ Lưu
+            Vào Sổ Tay</button>
+          </div>
+        </div>
+      </div>
       <div id="contribute" class="tab-page">
         <div class="form-container bg-lavender">
           <h2>✍️ Đóng Góp Ý Tưởng Mới</h2>
@@ -1189,15 +1217,19 @@
         userVotes: {},
         userPoints: 0,
         currentSelectedIdiom: null,
+        userNotes: {},
         leaderboard: [
-          { user: "SherlockVN", points: 12500 },
-          { user: "MysterySeeker", points: 11200 },
-          { user: "AceDectective", points: 10850 },
-          { user: "VietDetective", points: 9750 },
+          { user: "SherlockVN", points: 15200 },
+          { user: "MysterySeeker", points: 11400 },
+          { user: "AceDetective", points: 10800 },
+          { user: "VietDetective", points: 9700 },
           { user: "IdiomMaster", points: 9200 },
+          { user: "MazeRunner", points: 8500 },
+          { user: "WordHacker", points: 7100 },
+          { user: "BeginnerSpy", points: 4300 }
         ],
       };
-
+      
       const validAccounts = Array.from(
         { length: 25 },
         (_, i) => `admin${i + 1}`,
@@ -2141,24 +2173,54 @@
       }
 
       function handleSearch() {
-        const query = document.getElementById("idiomInput").value.trim();
-        if (!query) {
-          alert("Vui lòng nhập thành ngữ để tìm kiếm.");
-          return;
+          const query = document.getElementById("idiomInput").value.trim();
+          const resultsContainer = document.getElementById("homeSearchResults");
+
+          if (!query) {
+            alert("Vui lòng nhập thành ngữ để tìm kiếm.");
+            if (resultsContainer) resultsContainer.style.display = "none";
+            return;
+          }
+
+          const results = searchIdioms(query);
+
+          if (results.length > 0) {
+            resultsContainer.style.display = "grid";
+            resultsContainer.innerHTML = results
+              .map(
+                (c) => `
+      <div class="case-card" style="cursor: pointer; border: 2px solid var(--color-orange);" onclick="selectSearchResult('${c.title.replace(/'/g, "\\'")}')">
+        <h3 style="margin-bottom: 5px; font-size: 15px;">${c.title}</h3>
+        <p style="font-size: 13px; margin: 0; color: #555;">${c.desc}</p>
+      </div>
+    `
+              )
+              .join("");
+          } else {
+            resultsContainer.style.display = "block";
+            resultsContainer.innerHTML = `<p style="text-align: center; color: #666; font-style: italic;">Không tìm thấy thành ngữ "${query}".</p>`;
+          }
         }
-        const results = searchIdioms(query);
-        if (results.length > 0) {
-          updateHomeIdiom(results[0]);
-        } else {
-          alert(`Không tìm thấy thành ngữ "${query}". Vui lòng thử lại.`);
-        }
-      }
+
+        // Hàm mới: Xử lý khi người dùng click chọn 1 kết quả cụ thể
+        function selectSearchResult(title) {
+            const idiom = casesData.find((c) => c.title === title);
+            if (idiom) {
+              // Ẩn bảng kết quả tìm kiếm
+              document.getElementById("homeSearchResults").style.display = "none";
+              // Tùy chọn: Xóa text ở ô tìm kiếm để giao diện gọn gàng
+              document.getElementById("idiomInput").value = "";
+
+              // Mở thẳng trang chi tiết
+              openIdiomDetail(title);
+            }
+          }
 
       function renderCases() {
-        const grid = document.getElementById("casesGrid");
-        grid.innerHTML = casesData
-          .map(
-            (c) => `
+          const grid = document.getElementById("casesGrid");
+          grid.innerHTML = casesData
+            .map(
+              (c) => `
           <div class="case-card">
             <div>
               <span class="case-difficulty ${c.difficulty}">${c.diffText}</span>
@@ -2166,13 +2228,48 @@
             </div>
             <h3>${c.title}</h3>
             <p style="margin-bottom: 5px;"><strong>Nghĩa:</strong> ${c.desc}</p>
-            <p style="font-size: 13px; color: #555; font-style: italic;"><strong>Ví dụ:</strong> "${c.example}"</p>
-            <button class="btn-action" onclick="saveIdiom('${c.title}')">➕ Lưu Sổ Tay</button>
+            <p style="flex-grow: 1; font-size: 13px; color: #555; font-style: italic;"><strong>Ví dụ:</strong> "${c.example}"</p>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+              <button class="btn-action" style="flex: 1; font-size: 13px; padding: 8px;" onclick="openIdiomDetail('${c.title.replace(/'/g, "\\'")}')">🔍 Chi Tiết</button>
+              <button class="btn-action" style="flex: 1; font-size: 13px; padding: 8px; background-color: var(--color-pink);" onclick="saveIdiom('${c.title.replace(/'/g, "\\'")}')">➕ Lưu</button>
+            </div>
           </div>
         `,
-          )
-          .join("");
-      }
+            )
+            .join("");
+        }
+
+        // HÀM MỚI: Mở tab chi tiết và tải dữ liệu
+        function openIdiomDetail(title) {
+          const idiom = casesData.find((c) => c.title === title);
+          if (!idiom) return;
+
+          // Cập nhật nội dung text lớn
+          document.getElementById("detailTitle").innerText = idiom.title;
+          document.getElementById("detailDesc").innerText = idiom.desc;
+          document.getElementById("detailExample").innerText = `"${idiom.example}"`;
+
+          // Cập nhật Tags
+          const tagsHtml = idiom.tags.map(t => `<span class="case-difficulty tag-academic" style="background:#e0d4f5">${t}</span>`).join(" ");
+          document.getElementById("detailTags").innerHTML = `<span class="case-difficulty ${idiom.difficulty}">${idiom.diffText}</span> ${tagsHtml}`;
+
+          // Đổ dữ liệu ghi chú cũ (nếu có)
+          const notesInput = document.getElementById("detailNotes");
+          notesInput.value = state.userNotes[title] || "";
+          // Gán sự kiện lưu
+          // Gán sự kiện lưu ghi chú (code cũ của bạn)
+          document.getElementById("saveNoteBtn").onclick = () => {
+            state.userNotes[title] = notesInput.value;
+            updateSavedUI();
+            alert(`✅ Đã lưu ghi chú cho vụ án: "${title}"`);
+          };
+
+          // Bổ sung dòng này để gán chức năng cho nút Lưu Vào Sổ Tay:
+          document.getElementById("detailSaveIdiomBtn").onclick = () => saveIdiom(title);
+          // Chuyển màn hình
+          showTab("idiom-detail");
+        }
+      
 
       function handleLogin(event) {
         event.preventDefault();
@@ -2277,33 +2374,43 @@
       }
 
       function updateSavedUI() {
-        const grid = document.getElementById("savedGrid");
-        if (state.savedIdioms.size === 0) {
-          grid.innerHTML = `<div class="empty-state col-12">Sổ tay của bạn đang trống. Hãy quay lại "Hồ Sơ Vụ Án" để thu thập thêm!</div>`;
-          return;
+          const grid = document.getElementById("savedGrid");
+          if (state.savedIdioms.size === 0) {
+            grid.innerHTML = `<div class="empty-state col-12">Sổ tay của bạn đang trống. Hãy quay lại "Hồ Sơ Vụ Án" để thu thập thêm!</div>`;
+            return;
+          }
+
+          let html = "";
+          state.savedIdioms.forEach((title) => {
+            let isStatic = title.toLowerCase() === "when pigs fly";
+            const data = casesData.find((c) => c.title === title) || {
+              title: title,
+              desc: isStatic ? "Điều không tưởng" : "Bản ghi tùy chỉnh",
+              example: isStatic ? "When pigs fly! Thầy không bao giờ quên đâu." : "N/A",
+            };
+
+            // Lấy ghi chú của user (nếu chưa có thì hiển thị chữ mặc định)
+            const userNote = state.userNotes[title] ? state.userNotes[title] : "Chưa có ghi chú.";
+
+            html += `
+      <div class="case-card bg-yellow">
+        <h3>${data.title}</h3>
+        <p style="margin-bottom: 5px;"><strong>Nghĩa:</strong> ${data.desc}</p>
+        <p style="font-size: 13px; color: #555; font-style: italic;"><strong>Ví dụ:</strong> "${data.example}"</p>
+        
+        <div style="background: white; padding: 10px; border-radius: 8px; font-size: 13px; margin: 10px 0 15px 0; border: 1px dashed var(--color-dark);">
+          <strong>Ghi chú:</strong> ${userNote}
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: auto;">
+          <button class="btn-action" style="flex: 1; font-size: 13px; padding: 8px; background-color: var(--color-purple);" onclick="openIdiomDetail('${title.replace(/'/g, "\\'")}')">Chi Tiết</button>
+          <button class="btn-action" style="flex: 1; font-size: 13px; padding: 8px; background-color: #ffc5c5;" onclick="removeSaved('${title.replace(/'/g, "\\'")}')">Xóa</button>
+        </div>
+      </div>
+    `;
+          });
+          grid.innerHTML = html;
         }
-        let html = "";
-        state.savedIdioms.forEach((title) => {
-          // Xử lý case tĩnh "When pigs fly"
-          let isStatic = title.toLowerCase() === "when pigs fly";
-          const data = casesData.find((c) => c.title === title) || {
-            title: title,
-            desc: isStatic ? "Điều không tưởng" : "Bản ghi tùy chỉnh",
-            example: isStatic
-              ? "When pigs fly! Thầy không bao giờ quên đâu."
-              : "N/A",
-          };
-          html += `
-            <div class="case-card bg-yellow">
-              <h3>${data.title}</h3>
-              <p style="margin-bottom: 5px;"><strong>Nghĩa:</strong> ${data.desc}</p>
-              <p style="font-size: 13px; color: #555; font-style: italic;"><strong>Ví dụ:</strong> "${data.example}"</p>
-              <button class="btn-action" style="background:#ffc5c5" onclick="removeSaved('${title}')">❌ Xóa Khỏi Sổ</button>
-            </div>
-          `;
-        });
-        grid.innerHTML = html;
-      }
 
       function removeSaved(title) {
         state.savedIdioms.delete(title);
@@ -2582,7 +2689,6 @@
         renderCases();
         updateSavedUI();
         renderLeaderboard();
-        handleSearch();
         const searchBtn = document.getElementById("searchBtn");
         const idiomInput = document.getElementById("idiomInput");
         if (searchBtn) {
