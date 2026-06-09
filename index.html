@@ -975,8 +975,6 @@
         <div class="community-box">
           <div class="community-header">
             <h3>🤝 Mạng Lưới Thám Tử Cộng Đồng</h3>
-            <button class="btn-action" onclick="showTab('contribute')">
-              ✍️ Đóng Góp Bản Dịch
             </button>
           </div>
           <p
@@ -1126,6 +1124,16 @@
           <button class="btn-action" id="detailSaveIdiomBtn" style="background-color: var(--color-pink); margin-left: 10px;">➕ Lưu
             Vào Sổ Tay</button>
           </div>
+          <div class="community-box" style="margin-top: 30px;">
+            <div class="community-header">
+              <h3>Mạng Lưới Thám Tử Cộng Đồng</h3>
+              <button class="btn-action" id="detailSubmitTransBtn">Đóng Góp Bản Dịch</button>
+            </div>
+            <p style="font-size: 14px; color: #555; margin-top: -10px; margin-bottom: 20px;">
+              Cộng đồng cùng nhau tối ưu hóa ý nghĩa và tìm kiếm các cụm từ sát nghĩa nhất:
+            </p>
+            <div class="contribution-list" id="detailContribList"></div>
+          </div>
         </div>
       </div>
       <div id="contribute" class="tab-page">
@@ -1218,6 +1226,7 @@
         userPoints: 0,
         currentSelectedIdiom: null,
         userNotes: {},
+        communityTranslations: {},
         leaderboard: [
           { user: "SherlockVN", points: 15200 },
           { user: "MysterySeeker", points: 11400 },
@@ -2241,35 +2250,107 @@
 
         // HÀM MỚI: Mở tab chi tiết và tải dữ liệu
         function openIdiomDetail(title) {
-          const idiom = casesData.find((c) => c.title === title);
-          if (!idiom) return;
+            const idiom = casesData.find((c) => c.title === title);
+            if (!idiom) return;
 
-          // Cập nhật nội dung text lớn
-          document.getElementById("detailTitle").innerText = idiom.title;
-          document.getElementById("detailDesc").innerText = idiom.desc;
-          document.getElementById("detailExample").innerText = `"${idiom.example}"`;
+            state.currentSelectedIdiom = title;
 
-          // Cập nhật Tags
-          const tagsHtml = idiom.tags.map(t => `<span class="case-difficulty tag-academic" style="background:#e0d4f5">${t}</span>`).join(" ");
-          document.getElementById("detailTags").innerHTML = `<span class="case-difficulty ${idiom.difficulty}">${idiom.diffText}</span> ${tagsHtml}`;
+            document.getElementById("detailTitle").innerText = idiom.title;
+            document.getElementById("detailDesc").innerText = idiom.desc;
+            document.getElementById("detailExample").innerText = `"${idiom.example}"`;
 
-          // Đổ dữ liệu ghi chú cũ (nếu có)
-          const notesInput = document.getElementById("detailNotes");
-          notesInput.value = state.userNotes[title] || "";
-          // Gán sự kiện lưu
-          // Gán sự kiện lưu ghi chú (code cũ của bạn)
-          document.getElementById("saveNoteBtn").onclick = () => {
-            state.userNotes[title] = notesInput.value;
-            updateSavedUI();
-            alert(`✅ Đã lưu ghi chú cho vụ án: "${title}"`);
-          };
+            const tagsHtml = idiom.tags.map(t => `<span class="case-difficulty tag-academic" style="background:#e0d4f5">${t}</span>`).join(" ");
+            document.getElementById("detailTags").innerHTML = `<span class="case-difficulty ${idiom.difficulty}">${idiom.diffText}</span> ${tagsHtml}`;
 
-          // Bổ sung dòng này để gán chức năng cho nút Lưu Vào Sổ Tay:
-          document.getElementById("detailSaveIdiomBtn").onclick = () => saveIdiom(title);
-          // Chuyển màn hình
-          showTab("idiom-detail");
-        }
-      
+            const notesInput = document.getElementById("detailNotes");
+            notesInput.value = state.userNotes[title] || "";
+
+            document.getElementById("saveNoteBtn").onclick = () => {
+              state.userNotes[title] = notesInput.value;
+              updateSavedUI();
+              alert(`Đã lưu ghi chú cho vụ án: "${title}"`);
+            };
+
+            document.getElementById("detailSaveIdiomBtn").onclick = () => saveIdiom(title);
+
+            // Gọi hàm hiển thị danh sách bản dịch của idiom này
+            renderDetailTranslations(title);
+
+            // Xử lý sự kiện đóng góp bản dịch mới
+            document.getElementById("detailSubmitTransBtn").onclick = () => {
+              const userTranslation = prompt(`Đóng góp bản dịch tiếng Việt cho thành ngữ:\n"${title}"\n\nNhập bản dịch của bạn:`);
+              if (userTranslation && userTranslation.trim() !== "") {
+                if (!state.communityTranslations[title]) {
+                  state.communityTranslations[title] = [];
+                }
+                const newItemId = 'contrib_' + Date.now();
+                const displayName = state.currentUser ? state.currentUser : "thám_tử_ẩn_danh";
+
+                state.communityTranslations[title].unshift({
+                  id: newItemId,
+                  text: userTranslation.trim(),
+                  author: displayName,
+                  votesUp: 0,
+                  votesDown: 0
+                });
+
+                renderDetailTranslations(title);
+                alert(`Bản dịch "${userTranslation.trim()}" đã được thêm vào mạng lưới.`);
+              }
+            };
+
+            showTab("idiom-detail");
+          }
+        function renderDetailTranslations(title) {
+            const list = document.getElementById("detailContribList");
+            const translations = state.communityTranslations[title] || [];
+
+            if (translations.length === 0) {
+              list.innerHTML = `<p style="text-align: center; color: #666; font-style: italic; padding: 20px;">Chưa có bản dịch đóng góp nào cho thành ngữ này. Hãy là người đầu tiên!</p>`;
+              return;
+            }
+
+            list.innerHTML = translations
+              .map(
+                (t) => `
+          <div class="contribution-item">
+            <div class="item-details">
+              <strong>"${t.text}"</strong>
+              <p>Bởi thám tử học đường: <em>@${t.author}</em></p>
+            </div>
+            <div class="voting-panel">
+              <button class="btn-vote ${state.userVotes[t.id] === 'up' ? 'voted-up' : ''}" onclick="handleDetailVote('${title.replace(/'/g, "\\'")}', '${t.id}', 'up', this)">
+                👍 <span>${t.votesUp}</span>
+              </button>
+              <button class="btn-vote ${state.userVotes[t.id] === 'down' ? 'voted-down' : ''}" onclick="handleDetailVote('${title.replace(/'/g, "\\'")}', '${t.id}', 'down', this)">
+                👎 <span>${t.votesDown}</span>
+              </button>
+            </div>
+          </div>
+        `
+              )
+              .join("");
+          }
+
+          function handleDetailVote(title, contributionId, voteType, btnElement) {
+            if (state.userVotes[contributionId]) {
+              alert("Bạn đã bình chọn cho bản dịch này rồi! Mỗi người chỉ được vote 1 lần.");
+              return;
+            }
+
+            state.userVotes[contributionId] = voteType;
+
+            const translations = state.communityTranslations[title] || [];
+            const item = translations.find(t => t.id === contributionId);
+            if (item) {
+              if (voteType === 'up') item.votesUp++;
+              else item.votesDown++;
+            }
+
+            const span = btnElement.querySelector("span");
+            span.innerText = parseInt(span.innerText) + 1;
+            btnElement.classList.add(voteType === "up" ? "voted-up" : "voted-down");
+          }  
 
       function handleLogin(event) {
         event.preventDefault();
@@ -2701,6 +2782,49 @@
               handleSearch();
             }
           });
+        }
+        // --- HÀM ĐÓNG GÓP BẢN DỊCH (Hoạt động độc lập tại Trang Chủ) ---
+        function submitTranslation() {
+          // 1. Kiểm tra xem đang ở thành ngữ nào
+          const currentIdiom = state.currentSelectedIdiom;
+          if (!currentIdiom) {
+            alert("⚠️ Vui lòng tìm kiếm hoặc chọn một thành ngữ trước khi đóng góp bản dịch.");
+            return;
+          }
+
+          // 2. Mở popup nhập liệu
+          const userTranslation = prompt(`✍️ Đóng góp bản dịch tiếng Việt cho thành ngữ:\n"${currentIdiom}"\n\nNhập bản dịch hoặc cách diễn đạt trending của bạn:`);
+
+          // 3. Nếu người dùng nhập và bấm OK
+          if (userTranslation && userTranslation.trim() !== "") {
+            const list = document.getElementById("contribList");
+            const newItemId = 'contrib_' + Date.now();
+
+            // Lấy tên user (nếu chưa đăng nhập thì để ẩn danh)
+            const displayName = state.currentUser ? state.currentUser : "thám_tử_ẩn_danh";
+
+            // Khởi tạo giao diện cho bản dịch mới
+            const newItemHtml = `
+            <div class="contribution-item">
+              <div class="item-details">
+                <strong>"${userTranslation.trim()}"</strong>
+                <p>Bởi thám tử học đường: <em>@${displayName}</em> • Vừa xong</p>
+              </div>
+              <div class="voting-panel">
+                <button class="btn-vote" id="vote-up-${newItemId}" onclick="handleVote('${newItemId}', 'up', this)">
+                  👍 <span>0</span>
+                </button>
+                <button class="btn-vote" id="vote-down-${newItemId}" onclick="handleVote('${newItemId}', 'down', this)">
+                  👎 <span>0</span>
+                </button>
+              </div>
+            </div>
+          `;
+
+            // Chèn bản dịch mới lên trên cùng của danh sách
+            list.insertAdjacentHTML('afterbegin', newItemHtml);
+            alert(`✅ Cảm ơn bạn! Bản dịch "${userTranslation.trim()}" đã được thêm vào mạng lưới.`);
+          }
         }
       }
       init();
